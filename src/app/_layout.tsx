@@ -11,11 +11,12 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AgentRemindBanner } from '@/components/AgentRemindBanner';
 import { notifyNow, setupNotifications, speak } from '@/notifications';
 import { useSocketEvent } from '@/socket/useSocketEvent';
 import { SessionProvider, useSession } from '@/storage/SessionContext';
 import { colors, font, hhmm, ms } from '@/theme';
-import type { MissedDose, ParentReconnected, ParentSignedOut, TakenDose } from '@/types';
+import type { AgentAlert, MissedDose, ParentReconnected, ParentSignedOut, TakenDose } from '@/types';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -66,7 +67,17 @@ function GlobalListeners() {
     }
   });
 
-  return null;
+  useSocketEvent<AgentAlert>('agent:alert', (d) => {
+    if (session?.role !== 'caregiver') return;
+    const prefix = d.urgency === 'high' ? '🚨' : '🤖';
+    notifyNow(`${prefix} Care agent · ${d.parentName}`, d.summary);
+  });
+
+  return (
+    <>
+      <AgentRemindBanner />
+    </>
+  );
 }
 
 export default function RootLayout() {

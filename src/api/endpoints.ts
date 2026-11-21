@@ -1,4 +1,4 @@
-import type { Dose, Medicine, Parent, ParentStatus } from '../types';
+import type { AgentLog, Dose, Medicine, Parent, ParentStatus } from '../types';
 import { api } from './client';
 
 type Auth = { id: string; name: string; token: string };
@@ -47,7 +47,11 @@ export const todayDoses = (parentId: string) =>
 
 export const takeDose = (id: string) => api.post<Dose>(`/doses/${id}/take`).then((r) => r.data);
 
-// Demo helpers — disabled for now (backend DemoModule is also commented out).
-// export const demoMissDose = (id: string) => api.post<Dose>(`/demo/doses/${id}/miss`).then((r) => r.data);
-// export const demoDoseInOneMinute = (medicineId: string) =>
-//   api.post<Dose>(`/demo/medicines/${medicineId}/dose-in-1-min`).then((r) => r.data);
+export const listAgentLogs = (parentId: string) =>
+  api.get<AgentLog[]>(`/parents/${parentId}/agent-logs`).then((r) => r.data);
+
+export const demoMissDose = (id: string) => api.post<Dose>(`/demo/doses/${id}/miss`).then((r) => r.data);
+export const demoDoseInOneMinute = (medicineId: string) =>
+  api.post<Dose>(`/demo/medicines/${medicineId}/dose-in-1-min`).then((r) => r.data);
+export const demoRunAgent = (doseId: string) =>
+  api.post<{ ok: boolean; message?: string }>(`/demo/doses/${doseId}/run-agent`).then((r) => r.data);

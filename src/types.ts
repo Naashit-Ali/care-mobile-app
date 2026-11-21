@@ -42,3 +42,26 @@ export type Dose = {
 
 export type MissedDose = Dose & { parentName: string };
 export type TakenDose = Dose & { parentName: string; late: boolean };
+
+export type AgentLogType = 'thought' | 'tool_call' | 'result';
+export type AgentLog = {
+  _id: string;
+  parentId: string;
+  caregiverId: string;
+  doseId?: string;
+  type: AgentLogType;
+  tool?: string;
+  message: string;
+  createdAt: string;
+};
+
+export type AgentRemind = { message: string; doseId: string; medicineName: string };
+export type AgentAlert = {
+  parentId: string;
+  parentName: string;
+  doseId: string;
+  medicineName: string;
+  summary: string;
+  urgency: 'low' | 'medium' | 'high';
+  critical: boolean;
+};

@@ -114,7 +114,7 @@ export default function Index() {
         onPress={() => setRole('parent')}
       />
 
-      <Text style={styles.server}>Server · {API_URL}</Text>
+      {/* <Text style={styles.server}>Server · {API_URL}</Text> */}
     </Screen>
   );
 }
